@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Monthly Spending Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1e1e1e;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        canvas {
+            max-width: 500px;
+            max-height: 400px;
+            margin: 20px auto;
+            display: block;
+        }
+
+        button {
+            background-color: #3a3a3a;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #totals {
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Spending by Category</h2>
+    <button id="refreshBtn" aria-label="Refresh spending data">Refresh Data</button>
+    <canvas id="spendingChart" aria-label="Pie chart of spending by category" role="img"></canvas>
+    <div id="totals">
+        <p id="totalExpenses">Total Expenses: $0</p>
+        <p id="totalIncome">Total Income: $0</p>
+    </div>
+
+    <script>
+        let spendingChart;
+
+        async function fetchData() {
+            try {
+                const response = await fetch('chart-data.json');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                console.error('Error loading chart data:', error);
+                // fallback dummy data
+                return {
+                    expenses: [
+                        { category: "Food", amount: 250 },
+                        { category: "Rent", amount: 800 },
+                        { category: "Entertainment", amount: 120 }
+                    ],
+                    totalExpenses: 1170,
+                    totalIncome: 2000
+                };
+            }
+        }
+
+        function createOrUpdateChart(labels, data) {
+            const ctx = document.getElementById('spendingChart').getContext('2d');
+
+            if (!spendingChart) {
+                spendingChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Expenses',
+                            data: data,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(255, 206, 86, 0.7)',
+                                'rgba(75, 192, 192, 0.7)',
+                                'rgba(153, 102, 255, 0.7)',
+                                'rgba(255, 159, 64, 0.7)'
+                            ],
+                            borderColor: 'rgba(0,0,0,0.2)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'bottom',
+                                labels: {
+                                    color: 'white',
+                                    font: { size: 14 }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: ctx => `${ctx.label}: $${ctx.parsed.toFixed(2)}`
+                                }
+                            }
+                        }
+                    }
+                });
+            } else {
+                spendingChart.data.labels = labels;
+                spendingChart.data.datasets[0].data = data;
+                spendingChart.update();
+            }
+        }
+
+        async function loadAndRender() {
+            const data = await fetchData();
+
+            const expenses = data.expenses || [];
+            if (!expenses.length) {
+                document.getElementById('totalExpenses').textContent = `Total Expenses: $0`;
+                document.getElementById('totalIncome').textContent = `Total Income: $0`;
+                createOrUpdateChart([], []);
+                return;
+            }
+
+            const labels = expenses.map(e => e.category);
+            const amounts = expenses.map(e => e.amount);
+
+            document.getElementById('totalExpenses').textContent = `Total Expenses: $${(data.totalExpenses ?? amounts.reduce((a, b) => a + b, 0)).toFixed(2)}`;
+            document.getElementById('totalIncome').textContent = `Total Income: $${(data.totalIncome ?? 0).toFixed(2)}`;
+
+            createOrUpdateChart(labels, amounts);
+        }
+
+        document.getElementById('refreshBtn').addEventListener('click', loadAndRender);
+
+        window.onload = loadAndRender;
+    </script>
+</body>
+
+</html>

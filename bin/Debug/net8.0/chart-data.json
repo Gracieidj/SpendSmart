@@ -1,0 +1,10 @@
+{
+  "expenses": [
+    {
+      "category": "Entertainment",
+      "amount": 200
+    }
+  ],
+  "totalExpenses": 200,
+  "totalIncome": 0
+}

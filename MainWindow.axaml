@@ -1,0 +1,63 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="https://github.com/avaloniaui/designer"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Class="SpendSmart.MainWindow"
+        Title="SpendSmart" Width="600" Height="600"
+        Background="#1e1e1e">
+
+  <StackPanel Margin="15" Spacing="10">
+
+    <TextBlock Text="Add / Edit Transaction" FontSize="20" Foreground="White" HorizontalAlignment="Center"/>
+
+    <TextBox x:Name="ExpenseNameBox" Watermark="Name" />
+
+    <TextBox x:Name="AmountBox" Watermark="Amount" />
+
+    <ComboBox x:Name="CategoryBox">
+      <ComboBoxItem>Food</ComboBoxItem>
+      <ComboBoxItem>Transport</ComboBoxItem>
+      <ComboBoxItem>Entertainment</ComboBoxItem>
+      <ComboBoxItem>Housing</ComboBoxItem>
+      <ComboBoxItem>Utilities</ComboBoxItem>
+      <ComboBoxItem>Misc</ComboBoxItem>
+    </ComboBox>
+
+    <ComboBox x:Name="TypeBox">
+      <ComboBoxItem>Expense</ComboBoxItem>
+      <ComboBoxItem>Income</ComboBoxItem>
+    </ComboBox>
+
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+      <Button x:Name="AddButton" Content="Add" Width="100" Click="OnAddExpenseClicked"/>
+      <Button x:Name="CancelEditButton" Content="Cancel Edit" Width="100" Click="OnCancelEditClicked" IsVisible="False"/>
+      <Button Content="Remove Selected" Width="120" Click="OnRemoveExpenseClicked"/>
+    </StackPanel>
+
+    <TextBlock x:Name="TotalTextBlock" Text="Balance: $0.00" FontSize="18" Foreground="White" HorizontalAlignment="Center" />
+
+    <ListBox x:Name="ExpensesList" Height="200" SelectionChanged="ExpensesList_SelectionChanged"
+             Background="#333" Foreground="White" BorderThickness="1" BorderBrush="Gray"
+             Margin="0,10,0,10">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <TextBlock Text="{Binding Name}" Width="120" />
+            <TextBlock Text="{Binding Amount, StringFormat={}{0:C}}" Width="80" />
+            <TextBlock Text="{Binding Category}" Width="100" />
+            <TextBlock Text="{Binding Type}" Width="80" />
+            <TextBlock Text="{Binding Date, StringFormat=MM/dd/yyyy}" Width="100" />
+          </StackPanel>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+      <Button Content="Create / Update Chart" MinWidth="180" Click="OnCreateChartClicked"/>
+      <Button Content="Open Chart" MinWidth="180" Click="OnOpenChartClicked"/>
+    </StackPanel>
+
+  </StackPanel>
+
+</Window>

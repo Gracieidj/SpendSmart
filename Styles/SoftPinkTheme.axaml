@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Style xmlns="https://github.com/avaloniaui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:themes="clr-namespace:Avalonia.Themes.Fluent;assembly=Avalonia.Themes.Fluent">
+
+  <Style.Resources>
+  <Color x:Key="BackgroundColor">#af7c74</Color>    <!-- (175,124,116) -->
+  <Color x:Key="HighlightColor">#b78876</Color>     <!-- (183,136,118) -->
+  <Color x:Key="AccentColor">#c99e87</Color>        <!-- (201,158,135) -->
+  <Color x:Key="LightPink">#d2a993</Color>          <!-- (210,169,147) -->
+  <Color x:Key="ForegroundColor">#d9b7a5</Color>    <!-- (217,183,165) -->
+</Style.Resources>
+
+
+
+
+  <Style Selector="Window">
+    <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
+    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
+  </Style>
+
+  <Style Selector="TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
+  </Style>
+
+  <Style Selector="Button">
+    <Setter Property="Background" Value="{DynamicResource AccentColor}"/>
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Padding" Value="10,5"/>
+  </Style>
+
+  <Style Selector="TextBox">
+    <Setter Property="Background" Value="{DynamicResource LightPink}"/>
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource HighlightColor}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="Padding" Value="6,3"/>
+  </Style>
+
+</Style>
